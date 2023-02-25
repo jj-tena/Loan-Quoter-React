@@ -1,32 +1,68 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { ChangeEvent, useState } from "react";
+import Header from "./components/Header";
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  let [quantity, setQuantity] = useState(10000);
+
+  const MIN = 0;
+  const MAX = 20000;
+  const STEP = 100;
+
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    setQuantity(Number(e.target.value));
+  } 
+
+  function handleClickDecrease() {
+    const amount = quantity-STEP;
+    if(amount<MIN){
+      alert('Quantity not allowed');
+      return;
+    }
+    setQuantity(amount);
+  }
+
+  function handleClickIncrease() {
+    const amount = quantity+STEP;
+    if(amount>MAX){
+      alert('Quantity not allowed');
+      return;
+    }
+    setQuantity(amount);
+  }
+
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="my-20 max-w-lg mx-auto bg-white shadow p-10">
+      <Header/>
+
+      <div className="flex justify-around my-6">
+        <button
+          type="button"
+          className="h-10 w-10 flex items-center justify-center font-bold text-white
+          text-2xl bg-lime-500 rounded-full hover:outline-none hover:ring-2
+          hover:ring-offset-2 hover:ring-lime-500"
+          onClick={handleClickDecrease}
+        >-</button>
+        <button
+          type="button"
+          className="h-10 w-10 flex items-center justify-center font-bold text-white
+          text-2xl bg-lime-500 rounded-full hover:outline-none hover:ring-2
+          hover:ring-offset-2 hover:ring-lime-500"
+          onClick={handleClickIncrease}
+        >+</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      <input 
+        type="range"
+        className="w-full h-10 bg-gray-200 accent-lime-500 hover:accent-lime-300"
+        onChange={e => handleChange(e)}
+        min={MIN}
+        max={MAX}
+        step={STEP}
+        value={quantity}
+      />
+      <p className="text-center my-10 text-5xl font-extrabold text-indigo-600">{quantity}</p>
     </div>
   )
 }
